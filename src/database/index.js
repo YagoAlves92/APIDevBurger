@@ -22,11 +22,11 @@ class DataBase{
     );  
     }
 
-    mongo(){
-        this.mongoConnection = mongoose.connect(
-            'mongodb://localhost:27017/devburguer',
-        );
-    }
+   mongo(){
+    this.mongoConnection = mongoose.connect(
+        process.env.MONGO_URL
+    );
+}
  }
 
  export default new DataBase(); 
