@@ -1,8 +1,12 @@
+require('dotenv').config();
+
+
+
 module.exports = {
 
     dialect: 'postgres',
 
-    use_env_variable: 'DATABASE_URL',
+    url: process.env.DATABASE_URL,
 
     stripeSecretKey: process.env.STRIPE_KEY,
 

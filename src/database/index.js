@@ -15,7 +15,14 @@ class DataBase{
         this.mongo(); 
     }
     init(){
-        this.connection = new Sequelize(configDatabase);
+        this.connection = new Sequelize(
+        configDatabase.url,
+        {
+            dialect: configDatabase.dialect,
+
+            define: configDatabase.define,
+        }
+    );
         models
         .map((model)=> model.init(this.connection))
         .map(model => model.associate && model.associate(this.connection.models),
