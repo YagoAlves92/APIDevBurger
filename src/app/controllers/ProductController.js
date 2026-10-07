@@ -86,17 +86,16 @@ class ProductController {
         const { name, price, category_id, offer } = request.body;
 
         await Product.update({
-            name,
-            price,
-            category_id,
+            name: name ?? findProduct.name,
+            price: price ?? findProduct.price,
+            category_id: category_id ?? findProduct.category_id,
+            offer: offer ?? findProduct.offer,
             path,
-            offer,
         }, {
             where: {
                 id,
             }
-        })
-
+        });
         return response.status(200).json();
     }
 
