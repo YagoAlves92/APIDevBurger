@@ -2,9 +2,11 @@ import * as Yup from 'yup';
 import Product from '../models/Product';
 import Category from '../models/Category';
 import User from '../models/User';
+import { uploadFile } from '../services/uploadFile';
 
 class ProductController {
     async store(request, response) {
+
         const schema = Yup.object({
             name: Yup.string().required(),
             price: Yup.number().required(),
@@ -24,7 +26,14 @@ class ProductController {
             return response.status(401).json();
         }
 
-        const { filename: path } = request.file;
+        if (!request.file) {
+            return response.status(400).json({
+                error: 'Product image is required'
+            });
+        }
+
+        const path = await uploadFile(request.file, 'products');
+
         const { name, price, category_id, offer } = request.body;
 
         const product = await Product.create({
@@ -68,9 +77,10 @@ class ProductController {
                 .json({ error: 'Make sure your product ID is correct' });
         }
 
-        let path;
+        let path = findProduct.path;
+
         if (request.file) {
-            path = request.file.filename
+            path = await uploadFile(request.file, 'products');
         }
 
         const { name, price, category_id, offer } = request.body;

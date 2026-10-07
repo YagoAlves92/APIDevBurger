@@ -1,31 +1,31 @@
-import  Sequelize , {Model}  from "sequelize";
+import Sequelize, { Model } from "sequelize";
 
 class Product extends Model {
-   static init(sequelize){
+    static init(sequelize) {
         super.init({
             name: Sequelize.STRING,
             price: Sequelize.INTEGER,
             path: Sequelize.STRING,
-            offer: Sequelize.BOOLEAN, 
-            url:{
+            offer: Sequelize.BOOLEAN,
+            url: {
                 type: Sequelize.VIRTUAL,
-                get(){
-                    return `${process.env.API_URL}/product-file/${this.path}`;
+                get() {
+                    return `${process.env.SUPABASE_URL}/storage/v1/object/public/devburger-images/${this.path}`;
                 },
             },
         },
-        {
-            sequelize,
-        },
-    );
+            {
+                sequelize,
+            },
+        );
 
-    return this; 
+        return this;
     }
 
-    static associate (models){
+    static associate(models) {
         this.belongsTo(models.Category, {
-          foreignKey: 'category_id' , 
-          as: 'category' ,         
+            foreignKey: 'category_id',
+            as: 'category',
         })
     }
 }

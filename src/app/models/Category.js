@@ -1,24 +1,24 @@
-import  Sequelize , {Model}  from "sequelize";
+import Sequelize, { Model } from "sequelize";
 
 class Category extends Model {
-   static init(sequelize){
+    static init(sequelize) {
         super.init({
             name: Sequelize.STRING,
             path: Sequelize.STRING,
-            url:{
-                            type: Sequelize.VIRTUAL,
-                            get(){
-                               return `${process.env.API_URL}/category-file/${this.path}`;
-                            },
-                        },
-            
-        },
-        {
-            sequelize,
-        },
-    );
+            url: {
+                type: Sequelize.VIRTUAL,
+                get() {
+                    return `${process.env.SUPABASE_URL}/storage/v1/object/public/devburger-images/${this.path}`;
+                },
+            },
 
-    return this; 
+        },
+            {
+                sequelize,
+            },
+        );
+
+        return this;
     }
 }
 
