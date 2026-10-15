@@ -1,131 +1,179 @@
 # 🍔 DevBurger API
 
-API REST responsável pelo gerenciamento da hamburgueria online, autenticação, produtos, categorias, pedidos e integração com pagamentos Stripe.
+API REST do **DevBurger**, uma aplicação de hamburgueria online desenvolvida com Node.js e Express. Responsável pela autenticação de usuários, gerenciamento de produtos, categorias e pedidos, além da integração com pagamentos e armazenamento de imagens.
 
-## 👨‍💻 Funcionalidades
+🌐 **Frontend em produção:** [Acessar o DevBurger](https://interface-dev-burger.vercel.app/)
 
-* Cadastro de usuários
-* Login com JWT
-* Controle de permissões
-* Cadastro de produtos
-* Cadastro de categorias
-* Gerenciamento de pedidos
-* Upload de imagens
-* Integração com Stripe
-* Webhooks para confirmação de pagamentos
+## 📌 Funcionalidades
 
----
+- Cadastro e autenticação de usuários.
+- Autenticação com JWT.
+- Controle de acesso às rotas protegidas.
+- Cadastro e gerenciamento de produtos.
+- Cadastro e gerenciamento de categorias.
+- Gerenciamento de pedidos.
+- Upload e armazenamento de imagens no Supabase Storage.
+- Persistência de dados em PostgreSQL.
+- Integração com MongoDB.
+- Integração com Stripe para processamento de pagamentos.
 
-## 🛠 Tecnologias Utilizadas
+## 🛠️ Tecnologias utilizadas
 
-* Node.js
-* Express
-* PostgreSQL
-* Sequelize
-* JWT
-* Bcrypt
-* Multer
-* Stripe
+- **Node.js** — ambiente de execução JavaScript.
+- **Express** — criação das rotas e da API REST.
+- **PostgreSQL** — banco de dados relacional.
+- **Sequelize** — ORM para comunicação com PostgreSQL.
+- **MongoDB** — banco de dados NoSQL.
+- **Mongoose** — modelagem e integração com MongoDB.
+- **JWT** — autenticação baseada em tokens.
+- **bcrypt** — criptografia de senhas.
+- **Multer** — tratamento de uploads de arquivos.
+- **Supabase Storage** — armazenamento de imagens.
+- **Stripe** — integração com pagamentos.
+- **Yup** — validação de dados.
+- **Sucrase** — suporte à execução do código JavaScript utilizado no projeto.
 
----
+## 🏗️ Arquitetura
 
-## ⚙️ Variáveis de Ambiente
+A aplicação é organizada em uma API backend que se comunica com o frontend e integra serviços externos.
 
-Crie um arquivo `.env`:
+- **Frontend:** React.js, hospedado na Vercel.
+- **Backend:** Node.js e Express, hospedado no Render.
+- **Banco relacional:** PostgreSQL, hospedado no Supabase.
+- **Banco NoSQL:** MongoDB.
+- **Armazenamento de imagens:** Supabase Storage.
+- **Pagamentos:** Stripe.
 
-```env
+## ⚙️ Configuração do ambiente
 
-DB_USER=
-DB_PASSWORD=
-DB_NAME=
-STRIPE_KEY= 
+### Pré-requisitos
+
+- Node.js instalado.
+- Yarn instalado.
+- Acesso aos serviços e bancos de dados utilizados pela aplicação.
+
+### 1. Clone o repositório
+
+```bash
+git clone https://github.com/YagoAlves92/APIDevBurger.git
 ```
 
----
+### 2. Entre na pasta do projeto
 
-## ▶️ Executando o Projeto
+```bash
+cd APIDevBurger
+```
 
-Instalar dependências:
+### 3. Instale as dependências
 
 ```bash
 yarn install
 ```
 
-Executar migrations:
+### 4. Configure as variáveis de ambiente
+
+Crie um arquivo `.env` na raiz do projeto e configure as variáveis utilizadas pela aplicação.
+
+```env
+
+PORT=3001
+DATABASE_URL=
+MONGO_URL=
+JWT_SECRET=
+STRIPE_KEY=
+SUPABASE_URL=
+SUPABASE_SECRET_KEY=
+
+```
+
+Preencha os valores conforme as configurações dos seus serviços. Inclua também a variável de chave do Supabase com o nome exato esperado pelo arquivo de configuração do projeto.
+
+**Importante:** não compartilhe senhas, tokens ou chaves privadas e não envie o arquivo `.env` para o GitHub.
+
+### 5. Execute as migrations
+
+Se o banco ainda não estiver preparado, execute as migrations disponíveis no projeto:
 
 ```bash
 npx sequelize-cli db:migrate
 ```
 
-Iniciar servidor:
+### 6. Inicie a API
 
 ```bash
 yarn dev
 ```
 
----
+Por padrão, o servidor utiliza a porta `3001` em ambiente local, podendo utilizar outra porta conforme a variável `PORT`.
 
 ## 🔐 Autenticação
 
-A API utiliza JWT (JSON Web Token) para proteger rotas administrativas.
+A API utiliza JWT para autenticar usuários e proteger rotas que exigem autorização.
 
-Exemplo de Header:
+Após autenticar-se, envie o token no cabeçalho das requisições protegidas:
 
 ```http
 Authorization: Bearer seu_token
 ```
 
----
+## 📡 Principais rotas
 
-## 💳 Integração com Stripe
+### Usuários e autenticação
 
-Fluxo de pagamento:
-
-1. Cliente realiza pedido.
-2. API cria sessão de checkout.
-3. Stripe processa o pagamento.
-4. Webhook confirma a transação.
-5. Pedido é atualizado automaticamente.
-
----
-
-## 📡 Principais Rotas
-
-### Usuários
-
-```http
-POST /users
-POST /sessions
-```
+| Método | Rota | Descrição |
+|---|---|---|
+| POST | `/users` | Cadastro de usuário |
+| POST | `/session` | Autenticação e geração de sessão |
 
 ### Categorias
 
-```http
-GET /categories
-POST /categories
-```
+| Método | Rota | Descrição |
+|---|---|---|
+| GET | `/categories` | Listagem de categorias |
+| POST | `/categories` | Cadastro de categoria |
 
 ### Produtos
 
-```http
-GET /products
-POST /products
-PUT /products/:id
-DELETE /products/:id
-```
+| Método | Rota | Descrição |
+|---|---|---|
+| GET | `/products` | Listagem de produtos |
+| POST | `/products` | Cadastro de produto |
+| PUT | `/products/:id` | Atualização de produto |
+| DELETE | `/products/:id` | Remoção de produto |
 
 ### Pedidos
 
+| Método | Rota | Descrição |
+|---|---|---|
+| GET | `/orders` | Consulta de pedidos |
+| PUT | `/orders/:id` | Atualização de pedido |
+
+**Observação:** as rotas administrativas e de gerenciamento podem exigir autenticação e permissões específicas.
+
+## 💳 Integração com Stripe
+
+A API utiliza o **Stripe Payment Intents** para iniciar o processamento de pagamentos em reais (BRL).
+
+### Fluxo implementado
+
+1. O frontend envia os produtos para a API.
+2. A API calcula o valor informado e cria um Payment Intent.
+3. A API retorna o `clientSecret` para o frontend continuar o fluxo de pagamento.
+
+### Endpoint
+
 ```http
-GET /orders
-PUT /orders/:id
+POST /create-payment-intent
 ```
 
----
+O endpoint recebe uma lista de produtos contendo `id`, `quantity` e `price`, e retorna o `clientSecret` gerado pela Stripe.
 
 
 ## 👨‍💻 Autor
 
-Yago Oliveira
+**Yago Oliveira**
 
-Desenvolvedor Full Stack em formação focado em React, Node.js e APIs REST.
+Desenvolvedor Full Stack em formação, com foco em JavaScript, React.js, Node.js e desenvolvimento de APIs REST.
+
+- [GitHub](https://github.com/YagoAlves92)
+- [LinkedIn](https://www.linkedin.com/in/yagoalves/)
